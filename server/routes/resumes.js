@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-
+const Resume = require('../models/Resume');
 const router = express.Router();
 
 console.log("Resume upload route loaded");
@@ -34,29 +34,34 @@ const upload = multer({
   }
 });
 
-router.post('/upload', upload.single('resume'), (req, res) => {
+router.post('/upload', upload.single('resume'), async (req, res) => {
   console.log("Upload request received");
-
+  
   if (!req.file) {
     console.log("No file uploaded");
     return res.status(400).json({ error: 'Resume file is required.' });
   }
-
-  console.log("File uploaded successfully:");
-  console.log({
-    filename: req.file.filename,
+  try {
+  const resume = new Resume({
     originalname: req.file.originalname,
-    size: req.file.size,
-    path: req.file.path
+    filename: req.file.filename,
+    path: req.file.path,
+    size: req.file.size
   });
-
+  await resume.save(); // ✅ Save to MongoDB
+  console.log("✅ Resume metadata saved to MongoDB");
   res.status(201).json({
-    message: 'Resume uploaded successfully',
+    message: 'Resume uploaded and saved successfully',
+    resume,
     filename: req.file.filename,
     originalname: req.file.originalname,
     path: req.file.path,
     size: req.file.size
   });
+  } catch (error) {
+    console.error("❌ Error saving resume to DB:", error);
+    res.status(500).json({ error: 'Upload succeeded but DB save failed.' });
+  }
 });
 
 module.exports = router;
