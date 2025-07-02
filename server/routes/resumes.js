@@ -36,7 +36,7 @@ const upload = multer({
 
 router.post('/upload', upload.single('resume'), async (req, res) => {
   console.log("Upload request received");
-  
+
   if (!req.file) {
     console.log("No file uploaded");
     return res.status(400).json({ error: 'Resume file is required.' });
@@ -48,8 +48,8 @@ router.post('/upload', upload.single('resume'), async (req, res) => {
     path: req.file.path,
     size: req.file.size
   });
-  await resume.save(); // ✅ Save to MongoDB
-  console.log("✅ Resume metadata saved to MongoDB");
+  await resume.save(); //  Save to MongoDB
+  console.log(" Resume metadata saved to MongoDB");
   res.status(201).json({
     message: 'Resume uploaded and saved successfully',
     resume,
@@ -59,7 +59,7 @@ router.post('/upload', upload.single('resume'), async (req, res) => {
     size: req.file.size
   });
   } catch (error) {
-    console.error("❌ Error saving resume to DB:", error);
+    console.error(" Error saving resume to DB:", error);
     res.status(500).json({ error: 'Upload succeeded but DB save failed.' });
   }
 });

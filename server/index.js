@@ -13,9 +13,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/candidateFinder', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log("✅ Connected to MongoDB");
+  console.log(" Connected to MongoDB");
 }).catch((err) => {
-  console.error("❌ MongoDB connection error:", err);
+  console.error(" MongoDB connection error:", err);
 });
 app.get('/', (req, res) => {
   res.send('CandidateFinder API is running 🚀');
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/jobs', (req, res) => {
   const jobData = req.body;
-  console.log(jobData); // log it to test
+  console.log(jobData);
   res.status(201).json({ message: 'Job created successfully', data: jobData });
 });
 app.post('/api/resume', (req,res) =>{
