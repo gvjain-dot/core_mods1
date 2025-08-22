@@ -9,9 +9,10 @@ router.post('/', async (req, res) => {
   try {
     //  Create new Job instance
     const job = new Job({
+      jobId: jobData.jobId,
       title: jobData.title,
       description: jobData.description,
-      skills: jobData.skills || [] // Example: ["javascript", "node", "react"]
+      skills: jobData.skills || []
     });
 
     await job.save(); 
@@ -23,9 +24,23 @@ router.post('/', async (req, res) => {
     });
 
   } catch (error) {
+    if(error.code ==11000){
+      res.status(400).json({ error: 'JOB ID ALREADY EXSIST' });
+    }
     console.error(" Error saving job:", error);
     res.status(500).json({ error: 'Something went wrong while saving the job.' });
   }
+});
+// GET /api/jobs
+router.get('/', async (req,res)=> {
+    try{
+        const jobs = await Job.find();
+        res.status(200).json(jobs);
+    }
+    catch(error){
+    console.error("Error fetching jobs:", error);
+    res.status(500).json({ error: 'Failed to retrieve jobs' })
+    }
 });
 
 module.exports = router;

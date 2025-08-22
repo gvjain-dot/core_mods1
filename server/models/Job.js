@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema({
+  jobId:{
+    type:String,
+    required:true,
+    unique:true
+  },
   title: String,
   company: String,
   description: String,
@@ -14,3 +19,4 @@ const jobSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Job', jobSchema);
+

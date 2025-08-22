@@ -46,7 +46,8 @@ router.post('/upload', upload.single('resume'), async (req, res) => {
     originalname: req.file.originalname,
     filename: req.file.filename,
     path: req.file.path,
-    size: req.file.size
+    size: req.file.size,
+    jobId: req.body.jobId 
   });
   await resume.save(); //  Save to MongoDB
   console.log(" Resume metadata saved to MongoDB");
